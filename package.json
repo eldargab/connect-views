@@ -1,0 +1,9 @@
+{
+  "author": "Eldar Gabdullin <eldargab@gmail.com>",
+  "name": "connect-extensions",
+  "description": "Serve files with specified handlers with possibility to omit extensions",
+  "version": "0.0.0",
+  "main": "lib/middleware",
+  "dependencies": {},
+  "devDependencies": {}
+}
