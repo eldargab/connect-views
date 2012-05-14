@@ -1,9 +1,8 @@
 {
   "author": "Eldar Gabdullin <eldargab@gmail.com>",
-  "name": "connect-extensions",
-  "description": "Serve files with specified handlers with possibility to omit extensions",
+  "name": "connect-views",
+  "description": "Serve your jades, markdowns, lesses like static files",
   "version": "0.0.0",
-  "main": "lib/middleware",
-  "dependencies": {},
+  "main": "lib/index",
   "devDependencies": {}
 }
