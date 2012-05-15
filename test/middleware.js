@@ -9,7 +9,7 @@ describe('Middleware', function () {
         handler = sinon.spy()
         m = Middleware('root', handler)
         next = Next()
-        req = {}
+        req = { method: 'GET'}
         res = {}
     })
 
@@ -18,7 +18,7 @@ describe('Middleware', function () {
         m(req, res, next)
     }
 
-    it('Should pass path, req, res and next to handler', function () {
+    it('Should pass path, req, res and next to the handler', function () {
         test('/article')
         handler.calledWithExactly('root/article', req, res, next).should.be.true
     })
