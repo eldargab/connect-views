@@ -1,8 +1,10 @@
 var http = require('http')
+var EE = require('events').EventEmitter
 
-module.exports.Request = Request
+exports.Request = Request
 
 function Request (app) {
+    EE.call(this)
     var self = this
     this.data = []
     this.header = {}
@@ -15,6 +17,8 @@ function Request (app) {
         })
     }
 }
+
+Request.prototype = Object.create(EE.prototype)
 
 Request.prototype.get = function (path) {
     return this.request('GET', path)
@@ -31,19 +35,18 @@ Request.prototype.set = function(field, val){
     return this
 }
 
-Request.prototype.expect = function(contentType, body, fn){
-    this.end(function(res){
+Request.prototype.expect = function(contentType, body){
+    this.on('end', function(res){
         res.headers['content-type'].should.equal(contentType)
         if (body instanceof RegExp) {
             res.body.should.match(body)
         } else {
             res.body.should.equal(body)
         }
-        fn()
     })
 }
 
-Request.prototype.end = function(fn){
+Request.prototype.end = function(done){
     var self = this
 
     if (this.listening) {
@@ -61,14 +64,15 @@ Request.prototype.end = function(fn){
             res.on('data', function(chunk){ buf += chunk })
             res.on('end', function(){
                 res.body = buf
-                fn(res)
+                self.emit('end', res)
+                done()
             })
         })
 
         req.end()
     } else {
         this.server.on('listening', function(){
-            self.end(fn)
+            self.end(done)
         })
     }
     return this
