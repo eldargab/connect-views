@@ -22,6 +22,13 @@ describe('Integration tests', function () {
         req.get('/').expect('text/css', /header/)
     })
 
+    testEngine('Stylus', function (req, opts) {
+        opts.styl = {
+            paths: [opts.root + '/subdir']
+        }
+        req.get('/').expect('text/css', /header/)
+    })
+
     testEngine('Markdown', function (req) {
         req.get('/hello').expect('text/html', /<h1>Hello<\/h1>/)
     })
