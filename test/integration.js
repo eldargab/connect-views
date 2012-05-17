@@ -19,23 +19,23 @@ describe('Integration tests', function () {
         opts.less = {
             paths: [opts.root + '/subdir']
         }
-        req.get('/').expect('text/css', /header/)
+        req.get('/').expect('text/css; charset=UTF-8', /header/)
     })
 
     testEngine('Stylus', function (req, opts) {
         opts.styl = {
             paths: [opts.root + '/subdir']
         }
-        req.get('/').expect('text/css', /header/)
+        req.get('/').expect('text/css; charset=UTF-8', /header/)
     })
 
     testEngine('Markdown', function (req) {
-        req.get('/hello').expect('text/html', /<h1>Hello<\/h1>/)
+        req.get('/hello').expect('text/html; charset=UTF-8', /<h1>Hello<\/h1>/)
     })
 
     testEngine('Jade', function (req, opts) {
         opts['*'] = {hello: 'hello'}
         opts['jade'] = {world: 'world'}
-        req.get('/hello').expect('text/html', /hello world/)
+        req.get('/hello').expect('text/html; charset=UTF-8', /hello world/)
     })
 })

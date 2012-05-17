@@ -4,9 +4,15 @@
   "description": "Serve your jades, markdowns, lesses like static files",
   "version": "0.0.0",
   "main": "lib/index",
+  "dependencies": {
+    "mime": "*"
+  },
   "devDependencies": {
+    "mocha": "1.0.x",
+    "sinon": "1.3.x",
     "less": "*",
     "jade": "*",
-    "markdown": "*"
+    "markdown": "*",
+    "stylus": "*"
   }
 }
