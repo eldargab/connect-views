@@ -1,25 +1,15 @@
 var sinon = require('sinon')
 var Fs = require('./support/fake-fs')
 var Next = require('./support/next')
+var Onpath = require('./support/onpath')
 var Lookup = require('../lib/path-lookup')
-
-function Handler () {
-    var spy = sinon.spy()
-
-    spy.handles = function (file) {
-        this.calledOnce.should.be.true
-        this.calledWith(file).should.be.true
-    }
-
-    spy.notCalled = function () {
-        this.called.should.be.false
-    }
-
-    return spy
-}
 
 describe('Path handler', function () {
     var lookup, next, fs, req, res, h, options
+
+    function test (path) {
+        lookup(path, req, res, next)
+    }
 
     beforeEach(function () {
         fs = new Fs
@@ -27,7 +17,7 @@ describe('Path handler', function () {
             fsStat: function (p, cb) { fs.stat(p, cb) },
             fsDir: function (p, cb) { fs.readdir(p, cb) },
         }
-        h = Handler()
+        h = Onpath()
         lookup = Lookup(h, options)
         next = Next()
         req = {}
@@ -39,10 +29,6 @@ describe('Path handler', function () {
             'dir/index.jade'
         ])
     })
-
-    function test (path) {
-        lookup(path, req, res, next)
-    }
 
     it('Should be able to lookup file extension', function () {
         test('root/article')
@@ -58,7 +44,9 @@ describe('Path handler', function () {
 
     it('Should pass filename, req, res, next to the handler', function () {
         test('root/article')
-        h.calledWithExactly('root/article.md', req, res, next)
+        h.arg(1).should.equal(req)
+        h.arg(2).should.equal(res)
+        h.arg(3).should.equal(next)
     })
 
     it('Should support index files for dirs', function () {
@@ -93,6 +81,7 @@ describe('Path handler', function () {
         var readdir = sinon.stub(fs, 'readdir')
         var error = new Error
         readdir.withArgs('readdir/error').yields(error)
+        readdir.withArgs('readdir\\error').yields(error)
         test('readdir/error')
         next.calledWithExactly(error).should.be.true
         h.notCalled()

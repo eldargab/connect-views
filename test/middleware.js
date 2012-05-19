@@ -1,13 +1,14 @@
 var sinon = require('sinon')
 var Next = require('./support/next')
+var Onpath = require('./support/onpath')
 var Middleware = require('../lib/middleware')
 
 describe('Middleware', function () {
-    var m, next, req, res, handler
+    var m, next, req, res, onpath
 
     beforeEach(function () {
-        handler = sinon.spy()
-        m = Middleware('root', handler)
+        onpath = Onpath()
+        m = Middleware('root', onpath)
         next = Next()
         req = { method: 'GET'}
         res = {}
@@ -20,17 +21,20 @@ describe('Middleware', function () {
 
     it('Should pass path, req, res and next to the handler', function () {
         test('/article')
-        handler.calledWithExactly('root/article', req, res, next).should.be.true
+        onpath.handles('root/article')
+        onpath.arg(1).should.equal(req)
+        onpath.arg(2).should.equal(res)
+        onpath.arg(3).should.equal(next)
     })
 
     it('Should support urlencoded paths', function () {
         test('/path%20with%20spaces.md')
-        handler.calledWith('root/path with spaces.md')
+        onpath.handles('root/path with spaces.md')
     })
 
     it('Should respond with 403 Forbidden when traversing root', function () {
         test('/malicious/%2e%2e/%2e%2e/path')
         next.error(403)
-        handler.called.should.be.false
+        onpath.notCalled()
     })
 })

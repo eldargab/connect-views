@@ -46,6 +46,7 @@ Fs.prototype.readdir = function (dir, cb) {
 }
 
 Fs.prototype._getPath = function (path) {
+    path = path.replace('\\', '/') // windows support
     var segs = path.split('/')
     var item = this.root
     for (var i = 0; i < segs.length; i++) {
