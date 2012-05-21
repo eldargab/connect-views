@@ -1,8 +1,10 @@
 # Connect views
 
 This is a connect middleware. It serves templates like a static files, supports
-request paths with omited extensions (`some/doc` vs `some/doc.md`), has built in
-support for jade, markdown, less and stylus.
+request paths with omited extensions, has built in support for
+[jade](http://jade-lang.com/),
+[markdown](https://github.com/evilstreak/markdown-js),
+[less](http://lesscss.org/) and [stylus](http://learnboost.github.com/stylus/).
 
 ## Examples
 
@@ -67,6 +69,68 @@ app.use(Views({
         return engine
     })()
 }))
+```
+
+## Customization
+
+Several request processing steps are distinguished within module:
+
+1. Translate request's url into a file system path
+2. Lookup actual file to render
+3. Create view engine instance
+4. Render and send file contents
+
+For each step there is an independent public API component doing that job. You
+can always plug your own implementation for any step by monkey patching or by
+passing corresponding option to `Views()`:
+
+``` javascript
+// Serve only strict paths
+app.use(Views({
+    pathHandler: function (path, req, res, next) {
+        var opts = this
+
+        fs.stat(path, function (error, stat) {
+            if (error && error.code == 'ENOENT') return next()
+            if (error) return next(error)
+            opts.render(path, req, res, next)
+        })
+    }
+}))
+```
+
+## View engine
+
+View engine is an object with either `render(str, cb)` or `renderFile(path, cb)`
+method available. Engines which are just plain text processors should use
+`render` method, while engines which are able to bound several documents
+together should use `renderFile`. Such convention is useful as we can rely on
+file modification times for conditional gets and caching if there is only
+`render` method.
+
+There are also other conventions:
+
+* `contentType` property
+
+* All options are passed via `this`
+
+* By default a new engine instance is created for each request
+( with `Object.create(cachedProto)`). So it is safe to pass per request options.
+
+
+## Installation
+
+Via npm:
+
+``` bash
+$ npm install connect-views
+```
+
+To run tests install dev dependencies and launch npm test command:
+
+``` bash
+$ npm install -d
+$ npm test
 ```
 
 ## License

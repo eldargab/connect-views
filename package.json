@@ -1,13 +1,21 @@
 {
   "author": "Eldar Gabdullin <eldargab@gmail.com>",
   "name": "connect-views",
-  "description": "Serve your jades, markdowns, lesses like static files",
+  "description": "Serve your jades, markdowns, lesses like a static files",
   "version": "0.0.0",
   "main": "lib/index",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/eldargab/connect-views.git"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha -R spec"
+  },
   "dependencies": {
     "mime": "*"
   },
   "devDependencies": {
+    "express": "3.0.x",
     "mocha": "1.0.x",
     "sinon": "1.3.x",
     "less": "*",
