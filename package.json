@@ -2,7 +2,7 @@
   "author": "Eldar Gabdullin <eldargab@gmail.com>",
   "name": "connect-views",
   "description": "Serve your jades, markdowns, lesses like a static files",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "lib/index",
   "repository": {
     "type": "git",
