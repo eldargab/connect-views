@@ -18,6 +18,7 @@
     "express": "3.0.x",
     "mocha": "1.0.x",
     "sinon": "1.3.x",
+    "should": "*",
     "less": "*",
     "jade": "*",
     "markdown": "*",
